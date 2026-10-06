@@ -61,8 +61,8 @@ while(true)
         }
     }
 
-    int firstrow = 1;
-    int firstcol = 1;
+    int firstrow = 0;
+    int firstcol = 0;
     bool[,] open = new bool[array1,array2];
     int count = 0;
     int tryCount = 0;
