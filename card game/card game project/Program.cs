@@ -8,30 +8,30 @@ while(true)
     Console.WriteLine("1. EASY");
     Console.WriteLine("2. NORMAL");
     Console.WriteLine("3. HARD");
-    int array1 = 0;
-    int array2 = 0;
+    int rowNum = 0;
+    int colNum = 0;
     int arrayNum = 0;
     int level = int.Parse(Console.ReadLine());
 
     if (level == 1)
     {
-        array1 = 2;
-        array2 = 4;
-        arrayNum = 8;
+        rowNum = 2;
+        colNum = 4;
+        arrayNum = rowNum * colNum;
     }
     else if (level == 2)
     {
-        array1 = 4;
-        array2 = 4;
-        arrayNum = 16;
+        rowNum = 4;
+        colNum = 4;
+        arrayNum = rowNum * colNum;
     }
     else if (level == 3)
     {
-        array1 = 4;
-        array2 = 6;
-        arrayNum = 24;
+        rowNum = 4;
+        colNum = 6;
+        arrayNum = rowNum * colNum;
     }
-    int [,] card = new int[array1,array2];
+    int [,] card = new int[rowNum,colNum];
 
     Random random = new Random();
 
@@ -52,9 +52,9 @@ while(true)
 
     int index = 0;
 
-    for (int i = 0; i<array1; i++)
+    for (int i = 0; i<rowNum; i++)
     {
-        for (int j = 0; j<array2; j++)
+        for (int j = 0; j<colNum; j++)
         {
             card[i, j] = number[index];
             index++;
@@ -63,24 +63,23 @@ while(true)
 
     int firstrow = 0;
     int firstcol = 0;
-    bool[,] open = new bool[array1,array2];
-    int count = 0;
+    bool[,] open = new bool[rowNum,colNum];
+    int divisionNum = 0;
     int tryCount = 0;
     int matchCount = 0;
 
     while (matchCount<(arrayNum/2))
     {
         Console.Clear();
-        gametable(card, open);
+        PrintTable(card, open);
         Console.WriteLine("행과열을 띄워서 입력해주세요");
         string[] select = Console.ReadLine().Split(" ");
         int row = int.Parse(select[0])-1;
         int col = int.Parse(select[1])-1;
-        tryCount++;
 
 
  
-        if (row >= array1 || col >= array2 || row < 0 || col < 0)
+        if (row >= rowNum || col >= colNum || row < 0 || col < 0)
         {
             Console.WriteLine("잘못된 입력입니다 다시 입력해주세요.");
             Thread.Sleep(1500);
@@ -95,17 +94,18 @@ while(true)
         }
         else
         {
+            tryCount++;
             open[row, col] = true;
-            if (count == 0)
+            if (divisionNum == 0)
             {
                 firstrow = row;
                 firstcol = col;
-                count++;
+                divisionNum++;
             }
-            else if (count == 1)
+            else if (divisionNum == 1)
             {
                 Console.Clear();
-                gametable(card, open);
+                PrintTable(card, open);
                 if (card[firstrow, firstcol] == card[row, col])
                 {
                     Console.WriteLine("맞았습니다");
@@ -119,12 +119,12 @@ while(true)
                     open[firstrow, firstcol] = false;
                     open[row, col] = false;
                 }
-                count = 0;
+                divisionNum = 0;
             }
         }
     }
     Console.Clear();
-    gametable(card, open);
+    PrintTable(card, open);
     Console.WriteLine($"총 시도 횟수: {tryCount}");
 
     string retry;
@@ -148,11 +148,11 @@ while(true)
         break;
     }
 
-    void gametable(int[,] card, bool[,] open)
+    void PrintTable(int[,] card, bool[,] open)
     {
-        for (int i = 0; i < array1; i++)
+        for (int i = 0; i < rowNum; i++)
         {
-            for (int j = 0; j < array2; j++)
+            for (int j = 0; j < colNum; j++)
             {
                 if (open[i, j])
                 {
